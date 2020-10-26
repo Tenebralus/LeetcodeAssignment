@@ -1,0 +1,43 @@
+class Solution
+{
+public:
+    string multiply(string num1, string num2)
+    {
+        int product = ConvertStringToInt(num1) * ConvertStringToInt(num2);      
+        
+        return std::to_string(product);
+    }
+    
+    int ConvertStringToInt(string num)
+    {
+        unsigned int strMaxSize = 200;    
+        char numChar[strMaxSize];
+        strcpy(numChar, num.c_str());
+            
+        return ConvertCharArrayToInt(numChar, strMaxSize);
+    }
+    
+    // Concatenates the char array input to int through ASCII decimal value
+    // ex: num1 = "951", 900 + 50 + 1 = 951
+    int ConvertCharArrayToInt(const char* charArray, unsigned int strMaxSize)
+    {
+        unsigned int amountOfDigits = 0;
+        for(size_t i = 0; i < strMaxSize; ++i)
+        {
+            if(charArray[i] == NULL)
+            {
+                break;
+            }
+            ++amountOfDigits;
+        }
+        
+        unsigned const int ZeroCharAsDecimal = 48;
+        int numAsInt = 0;
+        for(size_t i = 0; i < amountOfDigits; ++i)
+        {
+            numAsInt += (charArray[i] - ZeroCharAsDecimal) * std::pow(10, (amountOfDigits - i - 1));
+        }
+        
+        return numAsInt;
+    }
+};
