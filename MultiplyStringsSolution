@@ -21,6 +21,8 @@ public:
     // ex: num1 = "951", 900 + 50 + 1 = 951
     int ConvertCharArrayToInt(const char* charArray, unsigned int strMaxSize)
     {
+        
+        // Determine array size
         unsigned int amountOfDigits = 0;
         for(size_t i = 0; i < strMaxSize; ++i)
         {
@@ -35,6 +37,7 @@ public:
         int numAsInt = 0;
         for(size_t i = 0; i < amountOfDigits; ++i)
         {
+            // Calculate each digit with proper trailing zeros
             numAsInt += (charArray[i] - ZeroCharAsDecimal) * std::pow(10, (amountOfDigits - i - 1));
         }
         
