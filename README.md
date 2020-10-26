@@ -1,10 +1,61 @@
 # LeetcodeAssignment
 
-Approach: Converting char to ASCII decimal and calculate the solution
+<h2>Approach: Converting chars to ASCII decimals and calculate the solution</h2>
+
+
+```
+class Solution
+{
+public:
+    string multiply(string num1, string num2)
+    {
+        int product = ConvertStringToInt(num1) * ConvertStringToInt(num2);      
+        
+        return std::to_string(product);
+    }
+    
+    int ConvertStringToInt(string num)
+    {
+        unsigned int strMaxSize = 200;    
+        char numChar[strMaxSize];
+        strcpy(numChar, num.c_str());
+            
+        return ConvertCharArrayToInt(numChar, strMaxSize);
+    }
+    
+    // Concatenates the char array input to int through ASCII decimal value
+    // ex: num1 = "951", 900 + 50 + 1 = 951
+    int ConvertCharArrayToInt(const char* charArray, unsigned int strMaxSize)
+    {
+        
+        // Determine array size
+        unsigned int amountOfDigits = 0;
+        for(size_t i = 0; i < strMaxSize; ++i)
+        {
+            if(charArray[i] == NULL)
+            {
+                break;
+            }
+            ++amountOfDigits;
+        }
+        
+        unsigned const int ZeroCharAsDecimal = 48;
+        int numAsInt = 0;
+        for(size_t i = 0; i < amountOfDigits; ++i)
+        {
+            // Calculate each digit with proper trailing zeros
+            numAsInt += (charArray[i] - ZeroCharAsDecimal) * std::pow(10, (amountOfDigits - i - 1));
+        }
+        
+        return numAsInt;
+    }
+};
+```
+
 
 Since we are not allowed to directly convert the string to a decimal value, a way to approach this problem is to use an ASCII table to determine the value from there.
 
-How does the ASCII table work?<br />
+<h3>How does the ASCII table work?</h3> <br />
 A string consists out of an array of characters (chars), and chars can hold a single symbol. This symbol also holds a countable value, in this case we want to use the
 decimal.
 
@@ -14,7 +65,7 @@ A char variable can be used both as a char and an int. If it is used as an int, 
 
 ![alt text](https://github.com/Tenebralus/LeetcodeAssignment/blob/main/Resources/ASCIITable2.PNG?raw=true)
 
-How do we apply this in code? <br />
+<h3>How do we apply this in code?</h3> <br />
 The decimals do not properly represent the char values correctly at the moment. Char '0' returns the decimal 48. So how do we deal with that? Well, we can always subtract 48 from the current decimal. So if we want the decimal from char '0', we can do 48 - 48 = 0. Same will work with '9': 57 - 48 = 9.
 ```
 unsigned const int ZeroCharAsDecimal = 48;
@@ -50,3 +101,8 @@ for(size_t i = 0; i < strMaxSize; ++i)
 (charArray[i] - ZeroCharAsDecimal) * std::pow(10, (amountOfDigits - i - 1));
 ```
 
+Now we have our value. But we are not done yet. We still need the product of both inputs and convert them back to string. Luckily, now that we have converted each input to an int, we can easily multiply them. And to convert back to string, all you need is the std::to_string() function:
+
+```
+std::to_string(product);
+```
