@@ -67,6 +67,7 @@ A char variable can be used both as a char and an int. If it is used as an int, 
 
 <h3>How do we apply this in code?</h3> <br />
 The decimals do not properly represent the char values correctly at the moment. Char '0' returns the decimal 48. So how do we deal with that? Well, we can always subtract 48 from the current decimal. So if we want the decimal from char '0', we can do 48 - 48 = 0. Same will work with '9': 57 - 48 = 9.
+
 ```
 unsigned const int ZeroCharAsDecimal = 48;
 
