@@ -10,4 +10,7 @@ decimal.
 
 ![alt text](https://github.com/Tenebralus/LeetcodeAssignment/blob/main/Resources/ASCIITable1.png?raw=true)
 
-A char variable can be used as both a char and an int. If it is used as an int, the decimal value from the ASCII is being used.
+A char variable can be used both as a char and an int. If it is used as an int, the decimal value from the ASCII is being used. Since we are looking at a string that holds digits, we will be looking at this part:
+
+![alt text](https://github.com/Tenebralus/LeetcodeAssignment/blob/main/Resources/ASCIITable2.png?raw=true)
+
