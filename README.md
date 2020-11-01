@@ -182,26 +182,79 @@ A char variable can be used both as a char and an int. If it is used as an int, 
 
 The decimals do not properly represent the char values correctly at the moment. Char '0' returns the decimal 48. So how do we deal with that? Well, we can always subtract 48 from the current decimal. So if we want the decimal from char '0', we can do 48 - 48 = 0. Same will work with '9': 57 - 48 = 9.
 
+
+### How do we deal with the calculation? <br />
+Now that we converted the input from string to integer, the next step is to calculate the product of both inputs. Since we deal with very large numbers, we can not just store the inputs as integers and multiply them, as integers have a limit to how much they can hold: <br />
+signed integer:   -2147483647 - 2147483647 <br />
+unsigned integer: 0 - 4294967295 <br />
+
+So we need a different method of calculating this problem. What we can do is use the grid method:
+
+![alt text](https://github.com/Tenebralus/LeetcodeAssignment/blob/main/Resources/Calc4.PNG?raw=true) <br />
+
+We can split up each of the product results in single digits and the amount of trailing zeros, which can be used to determine the position. When we are left with double digits, we split them up in single digits, and recalculate their position:
+
+![alt text](https://github.com/Tenebralus/LeetcodeAssignment/blob/main/Resources/Calc2.PNG?raw=true) <br />
+
+Then at last we add up all the single digits with the same positions. If the calculation results in double digits, split them again. Keep on doing this until there is only one digit per position left:
+
+![alt text](https://github.com/Tenebralus/LeetcodeAssignment/blob/main/Resources/Calc3.PNG?raw=true) <br />
+
+
+### How do we deal with this in code? <br />
+So, first we need to convert the strings to integers, we can translate each character with the following function:
+
 ```
 unsigned int GetCharDecimal(const char singleChar)
 {
     unsigned const int ZeroCharAsDecimal = 48;
     return singleChar - ZeroCharAsDecimal;
 }
-``` 
+```
 
-### How do we deal with the calculation? <br />
-Now that we have the separate digits, the next step is to calculate the product of both inputs. Since we deal with very large numbers, we can not just store the inputs as integers, as integers have a limit to how much they can hold:
-signed integer:   -2147483647 - 2147483647
-unsigned integer: 0 - 4294967295
+Next, we want our product results from the grid method and turn them into single digits and store their positions:
 
-So we need a different method of calculating this problem. What we can do is multi As an example, we will use the calculation 23 * 56:
-
-We perform a series of multiplications with the digits, split up any double digits along the way, and calculate the position of each digit:
-
-
-
-Now we have the separate digits as ints, but how do we go from the separate digits to the full number in the string? Let's take the input "951". With the above approach, we have the ints 9, 5 and 1. How do we go from 9, 5, 1 to 951? Well, we can use an array to store the single digits, and another array to store their position. We can then add all digits together that are on the same position. Sometimes that leads to double digits, which should be split up into single digits again.
+```
+void ExtractDigitsAndPositions(string num1, string num2, std::vector<unsigned int>& digits, std::vector<unsigned int>& positions )
+{
+    unsigned int firstDigit = 0;
+    unsigned int secondDigit = 0;
+    for(size_t i = 0; i < num1.length(); ++i)
+    {
+        for(size_t j = 0; j < num2.length(); ++j)
+        {
+            // store digits and positions
+            unsigned int digitProduct = GetCharDecimal(num1[i]) * GetCharDecimal(num2[j]);
+            unsigned int position = (num1.length() - i - 1) + (num2.length() - j - 1);
+            
+            // split if double digits
+            if(digitProduct > 9)
+            {
+                firstDigit = 0;
+                secondDigit = 0;
+                
+                // split
+                DoubleToSingleDigits(digitProduct, firstDigit, secondDigit);
+                
+                // store new split digits and positions
+                digits.push_back(secondDigit);
+                positions.push_back(position);
+                
+                ++position;
+                digits.push_back(firstDigit);
+                positions.push_back(position);
+            }
+            else
+            {
+                // store digits and positions
+                digits.push_back(digitProduct);
+                positions.push_back(position);
+            }
+        }
+    }
+}
+```
+We use two vectors, one for the single digits, the other for their positions. We also split with the following function:
 
 ```
 void DoubleToSingleDigits(unsigned int input, unsigned int& firstDigit, unsigned int& secondDigit)
@@ -219,33 +272,7 @@ void DoubleToSingleDigits(unsigned int input, unsigned int& firstDigit, unsigned
 }
 ```
 
-A way of getting to 951 is with the calculation 900 + 50 + 1 = 951. We can see that we have the single digits, we just lack the trailing zeros. We can determine the amount of trailing zeros from the array size. If we put the digits in an array, we can see the array has a size of 3. We can use simple math to then solve the problem: <br />
-arraySize = 3 <br />
-firstDigit =  9 * 10 ^ (arraySize - 1) = 900 <br />
-arraySize =   arraySize - 1 <br />
-secondDigit = 5 * 10 ^ (arraySize - 1) = 50 <br />
-arraySize =   arraySize - 1 <br />
-thirdDigit =  1 * 10 ^ (arraySize - 1) = 1 <br />
-900 + 50 + 1 = 951 <br /><br />
 
-In code: <br />
-```
-// Determine array size
-unsigned int amountOfDigits = 0;
-for(size_t i = 0; i < strMaxSize; ++i)
-{
-    if(charArray[i] == NULL)
-    {
-        break;
-    }
-    ++amountOfDigits;
-}
-
-...
-
-// Calculate each digit with proper trailing zeros
-(charArray[i] - ZeroCharAsDecimal) * std::pow(10, (amountOfDigits - i - 1));
-```
 
 Now we have our value. But we are not done yet. We still need the product of both inputs and convert them back to string. Luckily, now that we have converted each input to an int, we can easily multiply them. And to convert back to string, all you need is the std::to_string() function:
 
