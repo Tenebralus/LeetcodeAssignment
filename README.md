@@ -254,6 +254,7 @@ void ExtractDigitsAndPositions(string num1, string num2, std::vector<unsigned in
     }
 }
 ```
+
 We use two vectors, one for the single digits, the other for their positions. We also split with the following function:
 
 ```
@@ -272,14 +273,114 @@ void DoubleToSingleDigits(unsigned int input, unsigned int& firstDigit, unsigned
 }
 ```
 
-
-
-Now we have our value. But we are not done yet. We still need the product of both inputs and convert them back to string. Luckily, now that we have converted each input to an int, we can easily multiply them. And to convert back to string, all you need is the std::to_string() function:
+Afterwards, we add up all the digits with duplicate positions:
 
 ```
-std::to_string(product);
+// Adds up all the digits with the same positions until there are only distinct positions left
+void CalculateDigitsToDistinctPositions(std::vector<unsigned int>& digits, std::vector<unsigned int>& positions)
+{
+    while(1)
+    {       
+        int duplicatePositions = -1;
+        
+        // We are done if there are no duplicate positions
+        if(!AreDuplicatePositions(positions, duplicatePositions))
+        {
+            break;
+        }
+        
+        // Add up all the digits with the same positions
+        for(size_t i = 0; i < digits.size(); ++i)
+        {
+            for(size_t j = 0; j < digits.size(); ++j)
+            {
+                if(i == j)
+                {
+                    continue;
+                }
+                
+                if(positions[i] == duplicatePositions && positions[j] == duplicatePositions)
+                {
+                    digits[i] += digits[j];
+                    digits.erase(digits.begin() + j);
+                    positions.erase(positions.begin() + j);
+                    if( j <= i)
+                    {
+                        --i;
+                    }
+                    if(digits[i] > 9)
+                    {
+                        unsigned int firstDigit = 0;
+                        unsigned int secondDigit = 0;
+                        DoubleToSingleDigits(digits[i], firstDigit, secondDigit);
+                                                  
+                        digits.push_back(secondDigit);
+                        positions.push_back(positions[i]);
+                            
+                        digits.push_back(firstDigit);
+                        positions.push_back(positions[i] + 1);
+                        
+                        digits.erase(digits.begin() + i);
+                        positions.erase(positions.begin() + i);
+                    }
+                }   
+            }
+        }
+    }
+}
 ```
 
+We check if there are any duplicates. If not, then we break the while loop and end the calculations. If yes, we return the first duplicate position:
+
+```
+bool AreDuplicatePositions(std::vector<unsigned int> positions, int& duplicatePositions)
+{
+    duplicatePositions = -1;
+    for(size_t i = 0; i < positions.size(); ++i)
+    {
+        for(size_t j = 0; j < positions.size(); ++j)
+        {
+            if(i == j)
+            {
+                continue;
+            }
+            
+            if(positions[i] == positions[j])
+            {
+                duplicatePositions = positions[i];
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+```
+
+Then we search for all digits with the same duplicate position, and we add them up. After every add, we also check if the result ends up in double digits. When the function is done, it returns the digits and positions vectors with unique positions.
+Finally, we convert the result back into a string:
+
+```
+std::string MakeStringFromDigits(std::vector<unsigned int> digits, std::vector<unsigned int> positions)
+{
+    std::string returnValue;
+    for(int i = digits.size() - 1; i >= 0; --i)
+    {
+        for(int j = 0; j < digits.size(); ++j)
+        {
+            if (positions[j] == i)
+            {
+                returnValue.append(std::to_string(digits[j]));
+                break;
+            }
+        }
+    }
+    
+    return returnValue;
+}
+```
+
+The vectors were never organized, so we order it properly while putting the digits in the new string.
 
 ### Time Complexity <br />
 
