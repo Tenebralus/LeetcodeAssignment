@@ -383,6 +383,34 @@ std::string MakeStringFromDigits(std::vector<unsigned int> digits, std::vector<u
 The vectors were never organized, so we order it properly while putting the digits in the new string.
 
 ### Time Complexity <br />
+ExtractDigitsAndPositions:
+Best Case:
+O(n^2)
+If we only ever have to deal with single digits, we do not have to call DoubleToSingleDigits. We also deal with double nested for loops.
+Worst Case:
+O(n^3)
+If we have to deal with double digits, DoubleToSingleDigits will be called, which has another nested for loop, making it a total of 3.
 
+CalculateDigitsToDistinctPositions:
+Best Case:
+O(n^2)
+If there are no duplicate positions, we only ever call AreDuplicatePositions once, which consists of double nested for loops.
+Worst Case:
+O(n^2 + n^2)
 
 ### Space Complexity <br />
+ExtractDigitsAndPositions:
+Best Case:
+O(n)
+If the result is a single digit, for every iteration in the loop, a single value is added to the vectors.
+Worst Case:
+O(2n)
+If the result is double digits, for every iteration in the loop, two values are added to the vectors.
+
+CalculateDigitsToDistinctPositions:
+Best Case:
+O(-n)
+If the current digit is a single digit, only a value is removed from each vector.
+Worst Case:
+O(2n)
+If the current digit is double digits, for every iteration in the loop, two values are added to the vector.
