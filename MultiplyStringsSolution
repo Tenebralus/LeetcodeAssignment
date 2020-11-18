@@ -59,10 +59,8 @@ public:
     void DoubleToSingleDigits(unsigned int input, unsigned int& firstDigit, unsigned int& secondDigit)
     {
         // First digit
-        unsigned int tempInput = input;
-        for(size_t i = 0; tempInput >= 10; ++i )
+        for(size_t i = input; i >= 10; i -= 10)
         {
-            tempInput -= 10;
             ++firstDigit;
         }
         
