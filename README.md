@@ -25,15 +25,20 @@ public:
         {
             for(size_t j = 0; j < num2.length(); ++j)
             {
+                // calculate digits and positions
                 unsigned int digitProduct = GetCharDecimal(num1[i]) * GetCharDecimal(num2[j]);
                 unsigned int position = (num1.length() - i - 1) + (num2.length() - j - 1);
                 
+                // split if double digits
                 if(digitProduct > 9)
                 {
                     firstDigit = 0;
                     secondDigit = 0;
                     
+                    // split
                     DoubleToSingleDigits(digitProduct, firstDigit, secondDigit);
+                    
+                    // store new split digits and positions
                     digits.push_back(secondDigit);
                     positions.push_back(position);
                     
@@ -43,6 +48,7 @@ public:
                 }
                 else
                 {
+                    // store digits and positions
                     digits.push_back(digitProduct);
                     positions.push_back(position);
                 }
@@ -59,10 +65,8 @@ public:
     void DoubleToSingleDigits(unsigned int input, unsigned int& firstDigit, unsigned int& secondDigit)
     {
         // First digit
-        unsigned int tempInput = input;
-        for(size_t i = 0; tempInput >= 10; ++i )
+        for(size_t i = input; i >= 10; i -= 10)
         {
-            tempInput -= 10;
             ++firstDigit;
         }
         
@@ -95,25 +99,35 @@ public:
                     
                     if(positions[i] == duplicatePositions && positions[j] == duplicatePositions)
                     {
+                        // Add second digit to first, remove second digit
                         digits[i] += digits[j];
                         digits.erase(digits.begin() + j);
                         positions.erase(positions.begin() + j);
+                        
+                        // Removing a digit affects the array, pushing it one to the left.
+                        // If current i is affected, decrement it
                         if( j <= i)
                         {
                             --i;
                         }
+                        
+                        // split if double digits
                         if(digits[i] > 9)
                         {
                             unsigned int firstDigit = 0;
                             unsigned int secondDigit = 0;
+                            
+                            // split
                             DoubleToSingleDigits(digits[i], firstDigit, secondDigit);
-                                                      
+                            
+                            // store new split digits and positions
                             digits.push_back(secondDigit);
                             positions.push_back(positions[i]);
-                                
+                            
                             digits.push_back(firstDigit);
                             positions.push_back(positions[i] + 1);
                             
+                            // remove old digit
                             digits.erase(digits.begin() + i);
                             positions.erase(positions.begin() + i);
                         }
@@ -301,25 +315,35 @@ void CalculateDigitsToDistinctPositions(std::vector<unsigned int>& digits, std::
                 
                 if(positions[i] == duplicatePositions && positions[j] == duplicatePositions)
                 {
+                    // Add second digit to first, remove second digit
                     digits[i] += digits[j];
                     digits.erase(digits.begin() + j);
                     positions.erase(positions.begin() + j);
+                    
+                    // Removing a digit affects the array, pushing it one to the left.
+                    // If current i is affected, decrement it
                     if( j <= i)
                     {
                         --i;
                     }
+                    
+                    // split if double digits
                     if(digits[i] > 9)
                     {
                         unsigned int firstDigit = 0;
                         unsigned int secondDigit = 0;
+                        
+                        // split
                         DoubleToSingleDigits(digits[i], firstDigit, secondDigit);
-                                                  
+                        
+                        // store new split digits and positions
                         digits.push_back(secondDigit);
                         positions.push_back(positions[i]);
                             
                         digits.push_back(firstDigit);
                         positions.push_back(positions[i] + 1);
                         
+                        // remove old digit
                         digits.erase(digits.begin() + i);
                         positions.erase(positions.begin() + i);
                     }
