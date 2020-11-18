@@ -3,7 +3,7 @@
 ## Approach: Converting chars to ASCII decimals and calculate the solution
 
 
-```
+```c++
 class Solution
 {
 public:
@@ -218,7 +218,7 @@ Then at last we add up all the single digits with the same positions. If the cal
 ### How do we deal with this in code? <br />
 So, first we need to convert the strings to integers, we can translate each character with the following function:
 
-```
+```c++
 unsigned int GetCharDecimal(const char singleChar)
 {
     unsigned const int ZeroCharAsDecimal = 48;
@@ -228,7 +228,7 @@ unsigned int GetCharDecimal(const char singleChar)
 
 Next, we want our product results from the grid method and turn them into single digits and store their positions:
 
-```
+```c++
 void ExtractDigitsAndPositions(string num1, string num2, std::vector<unsigned int>& digits, std::vector<unsigned int>& positions )
 {
     unsigned int firstDigit = 0;
@@ -271,7 +271,7 @@ void ExtractDigitsAndPositions(string num1, string num2, std::vector<unsigned in
 
 We use two vectors, one for the single digits, the other for their positions. We also split with the following function:
 
-```
+```c++
 void DoubleToSingleDigits(unsigned int input, unsigned int& firstDigit, unsigned int& secondDigit)
 {
     // First digit
@@ -289,7 +289,7 @@ void DoubleToSingleDigits(unsigned int input, unsigned int& firstDigit, unsigned
 
 Afterwards, we add up all the digits with duplicate positions:
 
-```
+```c++
 // Adds up all the digits with the same positions until there are only distinct positions left
 void CalculateDigitsToDistinctPositions(std::vector<unsigned int>& digits, std::vector<unsigned int>& positions)
 {
@@ -356,7 +356,7 @@ void CalculateDigitsToDistinctPositions(std::vector<unsigned int>& digits, std::
 
 We check if there are any duplicates. If not, then we break the while loop and end the calculations. If yes, we return the first duplicate position:
 
-```
+```c++
 bool AreDuplicatePositions(std::vector<unsigned int> positions, int& duplicatePositions)
 {
     duplicatePositions = -1;
@@ -384,7 +384,7 @@ bool AreDuplicatePositions(std::vector<unsigned int> positions, int& duplicatePo
 Then we search for all digits with the same duplicate position, and we add them up. After every add, we also check if the result ends up in double digits. When the function is done, it returns the digits and positions vectors with unique positions.
 Finally, we convert the result back into a string:
 
-```
+```c++
 std::string MakeStringFromDigits(std::vector<unsigned int> digits, std::vector<unsigned int> positions)
 {
     std::string returnValue;
@@ -408,26 +408,38 @@ The vectors were never organized, so we order it properly while putting the digi
 
 ### Time Complexity <br />
 ExtractDigitsAndPositions: <br />
-O(n^2) <br />
+```
+O(n²)
+```
 The double nested for loops scale with the input. The for loop in DoubleToSingleDigits does not, so it is neglegible.
 
 CalculateDigitsToDistinctPositions: <br />
-O(n^2) <br />
+```
+O(n²)
+```
 The double nested for loops scale with the input.
 
 MakeStringFromDigits: <br />
-O(n^2) <br />
+```
+O(n²)
+```
 The double nested for loops scale with the input.
 
 ### Space Complexity <br />
 ExtractDigitsAndPositions: <br />
-O(n) <br />
+```
+O(n)
+```
 The size of the vectors scale linearly with the input size.
 
 CalculateDigitsToDistinctPositions: <br />
-O(n) <br />
+```
+O(n)
+```
 The size of the vector scales linearly with the input size.
 
 MakeStringFromDigits: <br />
-O(n) <br />
+```
+O(n)
+```
 The size of the string scales linearly with the input size.
