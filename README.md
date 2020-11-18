@@ -408,38 +408,26 @@ The vectors were never organized, so we order it properly while putting the digi
 
 ### Time Complexity <br />
 ExtractDigitsAndPositions: <br />
-```
-O(n²)
-```
+_**O(n²)**_ <br />
 The double nested for loops scale with the input. The for loop in DoubleToSingleDigits does not, so it is neglegible.
 
 CalculateDigitsToDistinctPositions: <br />
-```
-O(n²)
-```
+_**O(n²)**_ <br />
 The double nested for loops scale with the input.
 
 MakeStringFromDigits: <br />
-```
-O(n²)
-```
+_**O(n²)**_ <br />
 The double nested for loops scale with the input.
 
 ### Space Complexity <br />
 ExtractDigitsAndPositions: <br />
-```
-O(n)
-```
+_**O(n)**_ <br />
 The size of the vectors scale linearly with the input size.
 
 CalculateDigitsToDistinctPositions: <br />
-```
-O(n)
-```
+_**O(n)**_ <br />
 The size of the vector scales linearly with the input size.
 
 MakeStringFromDigits: <br />
-```
-O(n)
-```
+_**O(n)**_ <br />
 The size of the string scales linearly with the input size.
